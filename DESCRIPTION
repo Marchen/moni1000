@@ -1,0 +1,16 @@
+Package: moni1000
+Title: Manage Monitoring 1000 Data
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Michio",
+           family = "Oguro",
+           role = c("aut", "cre"),
+           email = "mog@ffpri.affrc.go.jp",
+           comment = c(ORCID = "0000-0003-0974-7971"))
+Description: This package create Monitoring 1000 project data file from census
+             data in long format.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
