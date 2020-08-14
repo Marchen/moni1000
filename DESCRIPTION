@@ -7,8 +7,8 @@ Authors@R:
            role = c("aut", "cre"),
            email = "mog@ffpri.affrc.go.jp",
            comment = c(ORCID = "0000-0003-0974-7971"))
-Description: This package create Monitoring 1000 project data file from census
-             data in long format.
+Description: This package creates Monitoring 1000 project data file from census
+             data in "long" format.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
