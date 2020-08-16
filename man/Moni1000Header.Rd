@@ -5,36 +5,30 @@
 \title{Create Monitoring 1000 file header data}
 \usage{
 Moni1000Header(
-  DATA_CREATOR = NA,
-  DATA_TITLE = NA,
-  SITE_NAME = NA,
-  PLOT_NAME = NA,
-  PLOT_CODE = NA,
-  PLOT_SIZE = NA,
   DATA_CREATED = format(Sys.Date(), "\%Y\%m\%d"),
-  PARAMETER_DEFINITIONS = ParameterDefinitions()
+  PARAMETER_DEFINITIONS = ParameterDefinitions(),
+  ...
 )
 }
 \arguments{
-\item{DATA_CREATOR}{name(s) of data creator(s).}
-
-\item{DATA_TITLE}{data title.}
-
-\item{SITE_NAME}{site name.}
-
-\item{PLOT_NAME}{plot name.}
-
-\item{PLOT_CODE}{plot code.}
-
-\item{PLOT_SIZE}{description of plot size.}
-
 \item{DATA_CREATED}{data creation date.}
 
 \item{PARAMETER_DEFINITIONS}{a \code{ParameterDefinitions} object having parameter descriptions.}
+
+\item{...}{other parameters placed on the header.}
 }
 \value{
 Moni100Header object.
 }
 \description{
 Create Monitoring 1000 file header data
+}
+\examples{
+Moni1000Header(
+	DATA_CREATOR = "John Doe", DATA_TITLE = "Important data",
+	SITE_NAME = "Nenokuni", PLOT_NAME = "Yomotsu-Hirasaka",
+	PLOT_CODE = "NK", PLOT_SIZE = "10ha",
+	PARAMETER_DEFINITIONS = ParameterDefinitions()
+)
+
 }
