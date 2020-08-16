@@ -1,33 +1,32 @@
 #------------------------------------------------------------------------------
 #'	Create Monitoring 1000 file header data
 #'
-#'	@param DATA_CREATOR name(s) of data creator(s).
-#'	@param DATA_TITLE data title.
-#'	@param SITE_NAME site name.
-#'	@param PLOT_NAME plot name.
-#'	@param PLOT_CODE plot code.
-#'	@param PLOT_SIZE description of plot size.
 #'	@param DATA_CREATED data creation date.
 #'	@param PARAMETER_DEFINITIONS
 #'		a \code{ParameterDefinitions} object having parameter descriptions.
+#'	@param ... other parameters placed on the header.
 #'
 #'	@return Moni100Header object.
+#'
+#'	@examples
+#'	Moni1000Header(
+#'		DATA_CREATOR = "John Doe", DATA_TITLE = "Important data",
+#'		SITE_NAME = "Nenokuni", PLOT_NAME = "Yomotsu-Hirasaka",
+#'		PLOT_CODE = "NK", PLOT_SIZE = "10ha",
+#'		PARAMETER_DEFINITIONS = ParameterDefinitions()
+#'	)
 #'
 #'	@export
 #'	@importFrom stats na.omit reshape
 #------------------------------------------------------------------------------
 Moni1000Header <- function(
-	DATA_CREATOR = NA, DATA_TITLE = NA, SITE_NAME = NA, PLOT_NAME = NA,
-	PLOT_CODE = NA, PLOT_SIZE = NA, DATA_CREATED = format(Sys.Date(), "%Y%m%d"),
-	PARAMETER_DEFINITIONS = ParameterDefinitions()
+	DATA_CREATED = format(Sys.Date(), "%Y%m%d"),
+	PARAMETER_DEFINITIONS = ParameterDefinitions(), ...
 ){
 	x <- list(
-		DATA_CREATED = DATA_CREATED, DATA_CREATOR = DATA_CREATOR,
-		DATA_TITLE = DATA_TITLE, SITE_NAME = SITE_NAME, PLOT_NAME = PLOT_NAME,
-		PLOT_CODE = PLOT_CODE, PLOT_SIZE = PLOT_SIZE,
+		DATA_CREATED = DATA_CREATED, ...,
 		PARAMETER_DEFINITIONS = PARAMETER_DEFINITIONS
 	)
-	x <- na.omit(x)
 	class(x) <- "Moni1000Header"
 	return(x)
 }
