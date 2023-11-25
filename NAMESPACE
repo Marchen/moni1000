@@ -3,7 +3,7 @@
 export(ColumnMap)
 export(Moni1000Header)
 export(ParameterDefinitions)
-export(write.moni1000.tree.census)
+export(write_moni1000_tree_census)
 importFrom(stats,na.omit)
 importFrom(stats,reshape)
 importFrom(utils,write.table)
