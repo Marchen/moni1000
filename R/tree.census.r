@@ -10,7 +10,9 @@ DEFAULT_STEM_COLUMNS <- c(
 #------------------------------------------------------------------------------
 #	Column names of yearly  data.
 #------------------------------------------------------------------------------
-DEFAULT_CENSUS_COLUMNS <- c("tag_no", "gbh", "note", "s_date", "year", "dead")
+DEFAULT_CENSUS_COLUMNS <- c(
+	"tag_no", "gbh", "note", "s_date", "year", "dead", "vine", "position_change"
+)
 
 
 #------------------------------------------------------------------------------
@@ -37,15 +39,17 @@ construct_moni1000_table <- function(
 	census <- data[census_columns]
 	census[["s_date"]] <- format(census[["s_date"]], "%Y%m%d")
 	wide <- reshape(
-		census, timevar = "year", idvar = "tag_no", direction = "wide",
-		sep = ""
+		census, timevar = "year", idvar = "tag_no", direction = "wide", sep = ""
 	)
 	wide <- wide[sort(colnames(wide))]
 	formatted <- merge(stem, wide)
 	splitted <- split(formatted, 1:nrow(formatted))
-	gbh <- do.call(rbind, lapply(splitted, format.gbh))
+	gbh <- do.call(rbind, lapply(splitted, format_gbh))
 	formatted[grepl("gbh", colnames(formatted))] <- gbh
-	return(formatted[!grepl("dead", colnames(formatted))])
+	result <- formatted[
+		!grepl("dead|vine|position_change", colnames(formatted))
+	]
+	return(result)
 }
 
 
@@ -56,24 +60,35 @@ construct_moni1000_table <- function(
 #		a data.frame having gbh and flag for dead stems.
 #		The data.frame should have gbhYEAR and deadYEAR columns.
 #------------------------------------------------------------------------------
-format.gbh <- function(x) {
-	gbh <- x[grepl("gbh", colnames(x))]
-	dead <- x[grepl("dead", colnames(x))]
+format_gbh <- function(x) {
+	gbh <- unlist(x[, grepl("gbh", colnames(x))])
+	dead <- unlist(x[, grepl("dead", colnames(x))])
+	vine <- unlist(x[, grepl("vine", colnames(x))])
+	position_change <- unlist(x[, grepl("position_change", colnames(x))])
+	gbh <- assign_dead_status(gbh, dead)
+	gbh <- assign_vine_status(gbh, vine)
+	gbh <- assign_position_change(gbh, position_change)
+	return(gbh)
+}
+
+
+assign_dead_status <- function(gbh, dead) {
 	result <- character(length(gbh))
 	died <- measured <- FALSE
+
 	for (i in seq_along(gbh)) {
 		if (died) {
 			result[i] <- "dd"
 			next
 		}
-		if (!is.na(dead[, i])) {
-			if (dead[,i]) {
+		if (!is.na(dead[i])) {
+			if (dead[i]) {
 				result[i] <- "d"
 				died <- TRUE
 				next
 			}
 		}
-		if (is.na(gbh[, i])) {
+		if (is.na(gbh[i])) {
 			if (measured) {
 				result[i] <- "nd"
 			} else {
@@ -81,8 +96,49 @@ format.gbh <- function(x) {
 			}
 			next
 		}
-		result[i] <- gbh[, i]
+		result[i] <- gbh[i]
 		measured <- TRUE
+	}
+	return(result)
+}
+
+
+assign_vine_status <- function(gbh, vine) {
+	result <- character(length(gbh))
+	has_vine <- FALSE
+	for (i in seq_along(vine)) {
+		if (is.na(vine[i])) {
+			result[i] <- gbh[i]
+		} else if (vine[i]) {
+			if (has_vine) {
+				result[i] <- gbh[i]
+			} else {
+				result[i] <- paste0("vi", gbh[i])
+				has_vine <- TRUE
+			}
+		} else {
+			if (has_vine) {
+				result[i] <- paste0("vn", gbh[i])
+				has_vine <- FALSE
+			} else {
+				result[i] <- gbh[i]
+			}
+		}
+	}
+	return(result)
+}
+
+
+assign_position_change <- function(gbh, position_change) {
+	result <- character(length(gbh))
+	for (i in seq_along(position_change)) {
+		if (is.na(position_change[i])) {
+			result[i] <- gbh[i]
+		} else if (position_change[i]) {
+			result[i] <- paste0("cd", gbh[i])
+		} else {
+			result[i] <- gbh[i]
+		}
 	}
 	return(result)
 }
