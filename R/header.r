@@ -39,20 +39,20 @@ Moni1000Header <- function(
 #
 #	@return a matrix having Moni1000 file header.
 #------------------------------------------------------------------------------
-construct.moni1000.header <- function(x){
-	n.param <- length(x$PARAMETER_DEFINITIONS)
-	n.header <- length(x)
-	header <- matrix("", ncol = 4, nrow = n.header + n.param)
+construct_moni1000_header <- function(x){
+	n_param <- length(x$PARAMETER_DEFINITIONS)
+	n_header <- length(x)
+	header <- matrix("", ncol = 4, nrow = n_header + n_param)
 	header[, 1] <- c(
-		"#/log", "#/doc", rep("#", n.header + n.param - 3), "#/data"
+		"#/log", "#/doc", rep("#", n_header + n_param - 3), "#/data"
 	)
 	header[1:length(x), 2] <- gsub("_", " ", names(x))
 	for (i in 1:(length(x) - 1)) {
 		header[i, 3] <- x[[i]]
 	}
-	for (i in 1:n.param) {
-		header[i + n.header - 1, 3] <- names(x$PARAMETER_DEFINITIONS)[i]
-		header[i + n.header - 1, 4] <- x$PARAMETER_DEFINITIONS[[i]]
+	for (i in 1:n_param) {
+		header[i + n_header - 1, 3] <- names(x$PARAMETER_DEFINITIONS)[i]
+		header[i + n_header - 1, 4] <- x$PARAMETER_DEFINITIONS[[i]]
 	}
 	return(header)
 }
@@ -65,8 +65,8 @@ construct.moni1000.header <- function(x){
 #	@param header a \link{\code{Moni1000header}} object.
 #	@param encoding file encoding.
 #------------------------------------------------------------------------------
-write.header <- function(path, header, encoding = "UTF-8") {
-	data <- construct.moni1000.header(header)
+write_header <- function(path, header, encoding = "UTF-8") {
+	data <- construct_moni1000_header(header)
 	write.table(
 		data, path, sep = ",", na = "", fileEncoding = encoding,
 		row.names = FALSE, col.names = FALSE
