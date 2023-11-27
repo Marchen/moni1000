@@ -72,6 +72,14 @@ format_gbh <- function(x) {
 }
 
 
+#------------------------------------------------------------------------------
+#	Assign dead status for each GBH record.
+#
+#	@param gbh
+#		a vector of GBH records.
+#	@param dead
+#		a logical vector of dead status.
+#------------------------------------------------------------------------------
 assign_dead_status <- function(gbh, dead) {
 	result <- character(length(gbh))
 	died <- measured <- FALSE
@@ -103,6 +111,14 @@ assign_dead_status <- function(gbh, dead) {
 }
 
 
+#------------------------------------------------------------------------------
+#	Assign existence of vine on GBH data.
+#
+#	@param gbh
+#		a vector of GBH records.
+#	@param dead
+#		a logical vector representing existence of vine(s).
+#------------------------------------------------------------------------------
 assign_vine_status <- function(gbh, vine) {
 	result <- character(length(gbh))
 	has_vine <- FALSE
@@ -129,6 +145,14 @@ assign_vine_status <- function(gbh, vine) {
 }
 
 
+#------------------------------------------------------------------------------
+#	Assign position change mark on GBH data.
+#
+#	@param gbh
+#		a vector of GBH records.
+#	@param position_change
+#		a logical vector indicating measurement position change.
+#------------------------------------------------------------------------------
 assign_position_change <- function(gbh, position_change) {
 	result <- character(length(gbh))
 	for (i in seq_along(position_change)) {
