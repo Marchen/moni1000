@@ -129,12 +129,16 @@ assign_vine_status <- function(gbh, vine) {
 			if (has_vine) {
 				result[i] <- gbh[i]
 			} else {
-				result[i] <- paste0("vi", gbh[i])
+				if (!gbh[i] %in% c("d", "dd")) {
+					result[i] <- paste0("vi", gbh[i])
+				}
 				has_vine <- TRUE
 			}
 		} else {
 			if (has_vine) {
-				result[i] <- paste0("vn", gbh[i])
+				if (!gbh[i] %in% c("d", "dd")) {
+					result[i] <- paste0("vn", gbh[i])
+				}
 				has_vine <- FALSE
 			} else {
 				result[i] <- gbh[i]
