@@ -124,7 +124,7 @@ assign_vine_status <- function(gbh, vine) {
 	had_vine_last_year <- FALSE
 	for (i in seq_along(vine)) {
 		# If the vine status is missing or the tree is dead, do nothing.
-		if (is.na(vine[i]) | (gbh[i] %in% c("d", "dd"))) {
+		if (is.na(vine[i]) | (gbh[i] %in% c("d", "dd", "nd", "na"))) {
 			next
 		}
 		# When a new vine appear, add "vi" to GBH.
