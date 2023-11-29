@@ -120,29 +120,23 @@ assign_dead_status <- function(gbh, dead) {
 #		a logical vector representing existence of vine(s).
 #------------------------------------------------------------------------------
 assign_vine_status <- function(gbh, vine) {
-	result <- character(length(gbh))
-	has_vine <- FALSE
+	result <- gbh
+	had_vine_last_year <- FALSE
 	for (i in seq_along(vine)) {
-		if (is.na(vine[i])) {
-			result[i] <- gbh[i]
-		} else if (vine[i]) {
-			if (has_vine) {
-				result[i] <- gbh[i]
-			} else {
-				if (!gbh[i] %in% c("d", "dd")) {
-					result[i] <- paste0("vi", gbh[i])
-				}
-				has_vine <- TRUE
-			}
-		} else {
-			if (has_vine) {
-				if (!gbh[i] %in% c("d", "dd")) {
-					result[i] <- paste0("vn", gbh[i])
-				}
-				has_vine <- FALSE
-			} else {
-				result[i] <- gbh[i]
-			}
+		# If the vine status is missing or the tree is dead, do nothing.
+		if (is.na(vine[i]) | (gbh[i] %in% c("d", "dd"))) {
+			next
+		}
+		# When a new vine appear, add "vi" to GBH.
+		if (vine[i] & !had_vine_last_year) {
+			result[i] <- paste0("vi", gbh[i])
+			had_vine_last_year <- TRUE
+			next
+		}
+		# When the vine disappear, add "vn" to GBH.
+		if (!vine[i] & had_vine_last_year) {
+			result[i] <- paste0("vn", gbh[i])
+			had_vine_last_year <- FALSE
 		}
 	}
 	return(result)
