@@ -156,7 +156,7 @@ assign_position_change <- function(gbh, position_change) {
 	for (i in seq_along(position_change)) {
 		if (is.na(position_change[i])) {
 			result[i] <- gbh[i]
-		} else if (position_change[i]) {
+		} else if (position_change[i] && gbh[i] != "na") {
 			result[i] <- paste0("cd", gbh[i])
 		} else {
 			result[i] <- gbh[i]
