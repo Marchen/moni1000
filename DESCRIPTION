@@ -1,7 +1,7 @@
 Package: moni1000
 Title: Manage Monitoring 1000 Data
 Version: 0.0.0.9000
-Authors@R: 
+Authors@R:
     person(given = "Michio",
            family = "Oguro",
            role = c("aut", "cre"),
