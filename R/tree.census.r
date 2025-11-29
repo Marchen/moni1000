@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-#   Column names of stme level  data.
+#   Column names of stem-level  data.
 #------------------------------------------------------------------------------
 DEFAULT_STEM_COLUMNS <- c(
     "mesh_xcord", "mesh_ycord", "tag_no", "indv_no",
@@ -120,7 +120,7 @@ assign_dead_status <- function(gbh, dead) {
 #
 #   @param gbh
 #       a vector of GBH records.
-#   @param dead
+#   @param vine
 #       a logical vector representing existence of vine(s).
 #------------------------------------------------------------------------------
 assign_vine_status <- function(gbh, vine) {
