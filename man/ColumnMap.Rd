@@ -13,12 +13,14 @@ ColumnMap(
   stem_ycord = "stem_ycord",
   spc_japan = "spc_japan",
   gbh = "gbh",
+  gbh_error = "gbh_error",
   vine = "vine",
   note = "note",
   s_date = "s_date",
   dead = "dead",
   position_change = "position_change",
-  year = "year"
+  year = "year",
+  ...
 )
 }
 \arguments{
@@ -37,6 +39,8 @@ ColumnMap(
 \item{spc_japan}{species name in Japanese.}
 
 \item{gbh}{girth at breast height.}
+
+\item{gbh_error}{non-NA value indicates the GBH value has measurement error.}
 
 \item{vine}{if TRUE, GBH measure includes vine(s).}
 
