@@ -14,6 +14,7 @@
 #'	@param spc_japan species name in Japanese.
 #'	@param gbh girth at breast height.
 #'	@param vine if TRUE, GBH measure includes vine(s).
+#'	@param gbh_error non-NA value indicates the GBH value has measurement error.
 #'	@param note remarks for each stem in each observation.
 #'	@param s_date census date.
 #'	@param dead logical indicating dead stems.
@@ -25,16 +26,16 @@ ColumnMap <- function(
 	mesh_xcord = "mesh_xcord", mesh_ycord = "mesh_ycord",
 	tag_no = "tag_no", indv_no = "indv_no",
 	stem_xcord = "stem_xcord", stem_ycord = "stem_ycord",
-	spc_japan = "spc_japan", gbh = "gbh", vine = "vine", note = "note",
-	s_date = "s_date", dead = "dead", position_change = "position_change",
-	year = "year", ...
+	spc_japan = "spc_japan", gbh = "gbh", gbh_error = "gbh_error",
+	vine = "vine", note = "note", s_date = "s_date", dead = "dead",
+	position_change = "position_change", year = "year", ...
 ) {
 	x <- list(
 		mesh_xcord = mesh_xcord, mesh_ycord = mesh_ycord, tag_no = tag_no,
 		indv_no = indv_no, stem_xcord = stem_xcord, stem_ycord = stem_ycord,
-		spc_japan = spc_japan, gbh = gbh, vine = vine, note = note,
-		s_date = s_date, dead = dead, position_change = position_change,
-		year = year, ...
+		spc_japan = spc_japan, gbh = gbh, gbh_error = gbh_error, vine = vine,
+		note = note, s_date = s_date, dead = dead,
+		position_change = position_change, year = year, ...
 	)
 	class(x) <- "ColumnMap"
 	return(x)

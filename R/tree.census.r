@@ -11,7 +11,8 @@ DEFAULT_STEM_COLUMNS <- c(
 #	Column names of yearly  data.
 #------------------------------------------------------------------------------
 DEFAULT_CENSUS_COLUMNS <- c(
-	"tag_no", "gbh", "note", "s_date", "year", "dead", "vine", "position_change"
+	"tag_no", "gbh", "gbh_error", "note", "s_date", "year", "dead", "vine",
+	"position_change"
 )
 
 
@@ -39,7 +40,8 @@ construct_moni1000_table <- function(
 	census <- data[census_columns]
 	census[["s_date"]] <- format(census[["s_date"]], "%Y%m%d")
 	wide <- reshape(
-		census, timevar = "year", idvar = "tag_no", direction = "wide", sep = ""
+		census, timevar = "year", idvar = "tag_no", direction = "wide",
+		sep = ""
 	)
 	wide <- wide[sort(colnames(wide))]
 	formatted <- merge(stem, wide)
@@ -47,7 +49,7 @@ construct_moni1000_table <- function(
 	gbh <- do.call(rbind, lapply(splitted, format_gbh))
 	formatted[grepl("gbh", colnames(formatted))] <- gbh
 	result <- formatted[
-		!grepl("dead|vine|position_change", colnames(formatted))
+		!grepl("dead|vine|position_change|gbh_error", colnames(formatted))
 	]
 	return(result)
 }
@@ -61,13 +63,15 @@ construct_moni1000_table <- function(
 #		The data.frame should have gbhYEAR and deadYEAR columns.
 #------------------------------------------------------------------------------
 format_gbh <- function(x) {
-	gbh <- unlist(x[, grepl("gbh", colnames(x))])
+	gbh <- unlist(x[, grepl("gbh[0-9]*$", colnames(x))])
+	gbh_error <- unlist(x[, grepl("gbh_error", colnames(x))])
 	dead <- unlist(x[, grepl("dead", colnames(x))])
 	vine <- unlist(x[, grepl("vine", colnames(x))])
 	position_change <- unlist(x[, grepl("position_change", colnames(x))])
 	gbh <- assign_dead_status(gbh, dead)
 	gbh <- assign_vine_status(gbh, vine)
 	gbh <- assign_position_change(gbh, position_change)
+	gbh <- assign_gbh_error(gbh, gbh_error)
 	return(gbh)
 }
 
@@ -158,6 +162,32 @@ assign_position_change <- function(gbh, position_change) {
 			result[i] <- gbh[i]
 		} else if (position_change[i] && gbh[i] != "na") {
 			result[i] <- paste0("cd", gbh[i])
+		} else {
+			result[i] <- gbh[i]
+		}
+	}
+	return(result)
+}
+
+
+#------------------------------------------------------------------------------
+#	Assign "nd" mark for GBH records with measurement error.
+#
+#	@param gbh
+#		a vector of GBH records.
+#	@param gbh_error
+#		a vector of measurement error status.
+#		For records with non-NA value, "nd" is added before GBH value.
+#
+#	@return
+#		a vector of GBH records with "nd" mark for records with measurement
+#		error.
+#------------------------------------------------------------------------------
+assign_gbh_error <- function(gbh, gbh_error) {
+	result <- character(length(gbh))
+	for (i in seq_along(gbh_error)) {
+		if (!is.na(gbh_error[i]) && !gbh[i] %in% c("d", "dd", "nd", "na")) {
+			result[i] <- paste0("nd", gbh[i])
 		} else {
 			result[i] <- gbh[i]
 		}
